@@ -42,8 +42,8 @@ export default function Register() {
     }
     const onRegister = async () => {
         if(password === password2) {
+            dispatch(setIsRedirected());
             try {
-                dispatch(setIsRedirected());
                 const userCredential = await createUserWithEmailAndPassword(
                     auth,
                     email,
