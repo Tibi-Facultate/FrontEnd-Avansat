@@ -23,7 +23,8 @@ import "./Register.module.css";
 import { useNavigate } from "react-router-dom";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../../lib/firebase";
-
+import {setIsRedirected, unsetIsRedirected} from "../../../store/redirect.reducer";
+import {useDispatch} from "react-redux";
 export default function Register() {
     const navigate = useNavigate();
 
@@ -34,10 +35,15 @@ export default function Register() {
     const [timer, setTimer] = useState(5);
 
     const [isSubmitting, setSubmitting] = useState(false);
-
+    const dispatch = useDispatch();
+    if(timer === 0){
+        dispatch(unsetIsRedirected());
+        navigate("/profile");
+    }
     const onRegister = async () => {
         if(password === password2) {
             try {
+                dispatch(setIsRedirected());
                 const userCredential = await createUserWithEmailAndPassword(
                     auth,
                     email,
@@ -66,11 +72,9 @@ export default function Register() {
     };
 
     const renderMessage = () => {
-        if(timer === 0){
-            navigate("/profile");
-        }
         if (error === "SUCCESS") {
             setTimeout( ()=>{
+                dispatch(setIsRedirected());
                 setTimer(timer-1)
             }, 1000)
             return(
