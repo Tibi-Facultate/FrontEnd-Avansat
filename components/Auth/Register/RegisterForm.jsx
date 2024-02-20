@@ -67,7 +67,7 @@ export default function Register() {
 
     const renderMessage = () => {
         if(timer === 0){
-            navigate("/login");
+            navigate("/profile");
         }
         if (error === "SUCCESS") {
             setTimeout( ()=>{
@@ -76,7 +76,7 @@ export default function Register() {
             return(
                 <Alert status="success" marginBottom={4}>
                     <Text width="100%" textAlign="center"> Ati fost inregistrat cu succes! Veti fi redirectionat catre
-                    pagina de logare in {timer} secunde! </Text>
+                    pagina profilului in {timer} secunde! </Text>
                 </Alert>
             );
         } else if (error !== "") {
