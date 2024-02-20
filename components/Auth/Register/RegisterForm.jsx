@@ -24,7 +24,7 @@ import { useNavigate } from "react-router-dom";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../../lib/firebase";
 import {setIsRedirected, unsetIsRedirected} from "../../../store/redirect.reducer";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 export default function Register() {
     const navigate = useNavigate();
 
@@ -36,14 +36,10 @@ export default function Register() {
 
     const [isSubmitting, setSubmitting] = useState(false);
     const dispatch = useDispatch();
-    if(timer === 0){
-        dispatch(unsetIsRedirected());
-        navigate("/profile");
-    }
     const onRegister = async () => {
         if(password === password2) {
-            dispatch(setIsRedirected());
             try {
+                dispatch(setIsRedirected());
                 const userCredential = await createUserWithEmailAndPassword(
                     auth,
                     email,
@@ -57,7 +53,10 @@ export default function Register() {
             setError("Parolele nu se potrivesc! Te rugam sa reincerci!")
         }
     };
-
+    if(timer === 0){
+        dispatch(unsetIsRedirected());
+        navigate("/profile");
+    }
     /////////////////////////////////////////////////////////
 
 
@@ -191,7 +190,7 @@ export default function Register() {
                     <Text textAlign="center" fontWeight="500">
                         Already have an account?
                     </Text>
-                    <Button colorScheme="main" variant="outline" onClick={() => {navigate("/login");}}>
+                    <Button colorScheme="main" variant="outline" onClick={() => {navigate("/login");navigate(0);}}>
                         Sign in
                     </Button>
                 </Stack>
